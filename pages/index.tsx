@@ -12,14 +12,14 @@ export const getStaticProps: GetStaticProps<AppleNewsProps> = async () => {
   }
 }
 
-const AppleNewsPage: NextPage<AppleNewsProps> = ({news}) => {
+const AppleNewsPage: NextPage<AppleNewsProps> = (props) => {
   return (
     <>
       <Head>
         <title>Apple News</title>
       </Head>
 
-      <AppleNews news={news} />
+      <AppleNews {...props} />
     </>
   )
 }
