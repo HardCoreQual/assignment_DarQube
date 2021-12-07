@@ -1,5 +1,6 @@
-import type { NextPage } from 'next'
+import type {NextPage} from 'next'
 import Head from 'next/head';
+import {AppleNews} from "components/appleNews";
 
 const AppleNewsPage: NextPage = () => {
   return (
@@ -11,12 +12,6 @@ const AppleNewsPage: NextPage = () => {
       <AppleNews />
     </>
   )
-}
-
-const AppleNews = () => {
-  return <div>
-
-  </div>
 }
 
 export default AppleNewsPage;
