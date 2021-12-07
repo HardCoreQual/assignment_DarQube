@@ -3,6 +3,7 @@ import {useState} from "react";
 import {MenuItemTextType, Navbar} from "components/navbar";
 import {OneNews} from "components/oneNews";
 import {Button} from "components/styled/paginationButton";
+import {SpaceBetween} from "components/styled/spaceBetween";
 
 export type AppleNewsProps = {
   news: AppleOneNewsType[]
@@ -38,28 +39,24 @@ const AppleNewsList = ({news}: AppleNewsProps) => {
     justify-content: flex-start;
   `}>
     <div>
-      <OneNews height={628} width={478} title={news[0].headline} imageUrl={news[0].image} />
+      <OneNews height={628} width={478}  oneNews={news[0]} />
     </div>
     <div>
       {Array(countRows).fill(null).map((e, i) => (
         <div key={i}>
           {news.slice(offset + rowLimit * i, offset + rowLimit * i + rowLimit).map(e => (
-            <OneNews height={425} width={280} title={e.headline} imageUrl={e.image} key={e.id} />
+            <OneNews height={425} width={280} oneNews={e} key={e.id} />
           ))}
         </div>
       ))}
-      <div css={`
-        display: flex;
-        justify-content: space-between;
-        margin-right: 18px;
-      `}>
+      <SpaceBetween css={`margin-right: 18px;`}>
         <div></div>
 
         <div>
           {page > 0 && <Button onClick={() => setPage(page -1 )}>Previous</Button>}
           {page < (news.length /pageLimit - 1) && <Button onClick={() => setPage(page + 1 )}>Next</Button>}
         </div>
-      </div>
+      </SpaceBetween>
     </div>
   </div>
 }
