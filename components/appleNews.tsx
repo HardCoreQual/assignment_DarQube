@@ -1,10 +1,9 @@
 import {AppleOneNewsType} from "types/appleNews";
-import {useState} from "react";
-import {MenuItemTextType, Navbar} from "components/navbar";
+import {Navbar} from "components/navbar";
 import {OneNews} from "components/oneNews";
 import {Button} from "components/styled/paginationButton";
-import {useAppDispatch, useAppSelector} from "../store/store";
-import {nextPage, previousPage} from "../store/news";
+import {useAppDispatch} from "../store/store";
+import {nextPage, previousPage, useNewsSelector} from "../store/news";
 import {SpaceBetween} from "components/styled/spaceBetween";
 
 export type AppleNewsProps = {
@@ -12,56 +11,59 @@ export type AppleNewsProps = {
 }
 
 export const AppleNews = (props: AppleNewsProps) => {
-  const [selected, setSelected] = useState<MenuItemTextType>('news');
-
   return <div css={`
     padding: 40px 13px 40px 31px;
     background-color: #242525;
     display: inline-block;
   `}>
-    <Navbar selected={selected} setSelected={setSelected} />
-    {selected === 'news' && <AppleNewsList {...props} />}
+    <Navbar />
+    <AppleNewsList {...props} />
   </div>
 }
 
 const AppleNewsList = ({news}:AppleNewsProps) => {
-  const page = useAppSelector<number>((state) => {
-      return state.news.page;
-  });
-
+  const isNewsMenu = useNewsSelector((state) => state.selectedMenu === 'news');
+  const bookmarkIds = useNewsSelector((state) => state.bookmarkIds);
+  const page = useNewsSelector((state) => state.page);
   const dispatch = useAppDispatch();
 
   if (!news.length) {
     return null;
   }
 
+  const showNews = isNewsMenu ? news.slice(1) : news.filter((e) => bookmarkIds.includes(e.id));
+
   const rowLimit = 3;
   const countRows = 2;
   const pageLimit = countRows * rowLimit;
 
-  const offset = 1 + page * pageLimit;
+  const offset = page * pageLimit;
 
   return <div css={`
     display: flex;
     justify-content: flex-start;
   `}>
+    {isNewsMenu && (
+      <div>
+        <OneNews height={628} width={478}  oneNews={news[0]} />
+      </div>
+    )}
     <div>
-      <OneNews height={628} width={478}  oneNews={news[0]} />
-    </div>
-    <div>
-      {Array(countRows).fill(null).map((e, i) => (
-        <div key={i}>
-          {news.slice(offset + rowLimit * i, offset + rowLimit * i + rowLimit).map(e => (
+      {Array(countRows).fill(null).map((e, i) => {
+        const rowOffset = offset + rowLimit * i;
+
+        return <div key={i}>
+          {showNews.slice(rowOffset, rowOffset + rowLimit).map(e => (
             <OneNews height={425} width={280} oneNews={e} key={e.id} />
           ))}
         </div>
-      ))}
+      })}
       <SpaceBetween css={`margin-right: 18px;`}>
         <div></div>
 
         <div>
           {page > 0 && <Button onClick={() => dispatch(previousPage())}>Previous</Button>}
-          {page < (news.length /pageLimit - 1) && <Button onClick={() => dispatch(nextPage())}>Next</Button>}
+          {page < (showNews.length /pageLimit - 1) && <Button onClick={() => dispatch(nextPage())}>Next</Button>}
         </div>
       </SpaceBetween>
     </div>
