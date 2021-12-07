@@ -1,8 +1,7 @@
-import Image from "next/image";
-import EmptyBookmarkImg from "../images/Vector.png";
 import {SpaceBetween} from "components/styled/spaceBetween";
 import {Background, BackgroundContainer} from "components/styled/backgroundImage";
 import {AppleOneNewsType} from "types/appleNews";
+import {EmptyBookmark} from "../images/emptyBookmark";
 
 export const OneNews = ({height, width, oneNews}: {
   height: number,
@@ -29,9 +28,12 @@ export const OneNews = ({height, width, oneNews}: {
 
         </div>
 
-        <Image src={EmptyBookmarkImg} width={10} height={10}/>
+        <NewsBookmark id={oneNews.id} />
       </SpaceBetween>
     </SpaceBetween>
   </BackgroundContainer>
 }
 
+const NewsBookmark = ({id}: {id: number}) => {
+  return <EmptyBookmark />
+}
