@@ -1,7 +1,11 @@
 import {SpaceBetween} from "components/styled/spaceBetween";
 import {Background, BackgroundContainer} from "components/styled/backgroundImage";
 import {AppleOneNewsType} from "types/appleNews";
-import {EmptyBookmark} from "../images/emptyBookmark";
+import {useAppDispatch, useAppSelector} from "../store/store";
+import {newsActions} from "../store/news";
+import Image from 'next/image';
+import bookmark from '../images/bookmark.svg';
+import emptyBookmark from '../images/emptyBookmark.svg';
 
 export const OneNews = ({height, width, oneNews}: {
   height: number,
@@ -39,5 +43,12 @@ export const OneNews = ({height, width, oneNews}: {
 }
 
 const NewsBookmark = ({id}: {id: number}) => {
-  return <EmptyBookmark />
+  const isActive = useAppSelector<boolean>((state) => {
+    return state.news.bookmarkIds.includes(id);
+  });
+  const dispatch = useAppDispatch();
+
+  return isActive
+    ? <Image src={bookmark} width={13} height={13} onClick={() => dispatch(newsActions.removeBookmarkId(id))} />
+    : <Image src={emptyBookmark} width={13} height={13} onClick={() => dispatch(newsActions.addBookmarkId(id))} />;
 }

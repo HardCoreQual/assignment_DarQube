@@ -3,8 +3,8 @@ import {useState} from "react";
 import {MenuItemTextType, Navbar} from "components/navbar";
 import {OneNews} from "components/oneNews";
 import {Button} from "components/styled/paginationButton";
-import {useAppDispatch, useAppSelector} from "../app/store";
-import {nextPage, previousPage} from "../app/news";
+import {useAppDispatch, useAppSelector} from "../store/store";
+import {nextPage, previousPage} from "../store/news";
 import {SpaceBetween} from "components/styled/spaceBetween";
 
 export type AppleNewsProps = {
