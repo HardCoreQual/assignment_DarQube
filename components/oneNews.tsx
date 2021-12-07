@@ -16,21 +16,25 @@ export const OneNews = ({height, width, oneNews}: {
       {/*<Image src={imageUrl} layout="fill" alt={title} />*/}
     </Background>
 
-    <SpaceBetween css={`
-      flex-direction: column;
-      padding: 32px 26px;
-      height: calc( 100% - 66px);
-    `}>
-      <SpaceBetween/>
+    <div css={`padding: 32px 26px; height: 100%`}>
+      <div css={`position: relative; height: calc(100% - 64px)`}>
+        <div css={`
+          position: absolute;
+          bottom: 0;
+          right: 0;
+        `}>
+          <NewsBookmark id={oneNews.id} />
+        </div>
+      </div>
 
       <SpaceBetween>
         <div>
 
         </div>
 
-        <NewsBookmark id={oneNews.id} />
+
       </SpaceBetween>
-    </SpaceBetween>
+    </div>
   </BackgroundContainer>
 }
 
