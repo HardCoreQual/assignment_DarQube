@@ -3,6 +3,8 @@ import Head from 'next/head';
 import {AppleNews, AppleNewsProps} from "components/appleNews";
 import axios from "axios";
 import {AppleOneNewsType} from "types/appleNews";
+import store from "../app/store";
+import {Provider} from "react-redux";
 
 export const getServerSideProps: GetStaticProps<AppleNewsProps> = async () => {
   const news = await axios.get<AppleOneNewsType[]>((process.env as any).NEWS_SOURCE).then(resp => resp.data);
@@ -21,7 +23,9 @@ const AppleNewsPage: NextPage<AppleNewsProps> = (props) => {
         <title>Apple News</title>
       </Head>
 
-      <AppleNews {...props} />
+      <Provider store={store}>
+        <AppleNews {...props} />
+      </Provider>
     </>
   )
 }

@@ -3,6 +3,8 @@ import {useState} from "react";
 import {MenuItemTextType, Navbar} from "components/navbar";
 import {OneNews} from "components/oneNews";
 import {Button} from "components/styled/paginationButton";
+import {useAppDispatch, useAppSelector} from "../app/store";
+import {nextPage, previousPage} from "../app/news";
 
 export type AppleNewsProps = {
   news: AppleOneNewsType[]
@@ -21,8 +23,13 @@ export const AppleNews = (props: AppleNewsProps) => {
   </div>
 }
 
-const AppleNewsList = ({news}: AppleNewsProps) => {
-  const [page, setPage] = useState(0);
+const AppleNewsList = ({news}:AppleNewsProps) => {
+  const page = useAppSelector<number>((state) => {
+      return state.news.page;
+  });
+
+  const dispatch = useAppDispatch();
+
   if (!news.length) {
     return null;
   }
@@ -56,8 +63,8 @@ const AppleNewsList = ({news}: AppleNewsProps) => {
         <div></div>
 
         <div>
-          {page > 0 && <Button onClick={() => setPage(page -1 )}>Previous</Button>}
-          {page < (news.length /pageLimit - 1) && <Button onClick={() => setPage(page + 1 )}>Next</Button>}
+          {page > 0 && <Button onClick={() => dispatch(previousPage())}>Previous</Button>}
+          {page < (news.length /pageLimit - 1) && <Button onClick={() => dispatch(nextPage())}>Next</Button>}
         </div>
       </div>
     </div>
