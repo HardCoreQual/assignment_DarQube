@@ -4,10 +4,12 @@ import {AppleNews, AppleNewsProps} from "components/appleNews";
 import axios from "axios";
 import {AppleOneNewsType} from "types/appleNews";
 
-export const getStaticProps: GetStaticProps<AppleNewsProps> = async () => {
+export const getServerSideProps: GetStaticProps<AppleNewsProps> = async () => {
+  const news = await axios.get<AppleOneNewsType[]>((process.env as any).NEWS_SOURCE).then(resp => resp.data);
+
   return {
     props: {
-      news: await axios.get<AppleOneNewsType[]>((process.env as any).NEWS_SOURCE).then(resp => resp.data),
+      news: news.sort((a,b) => a.datetime - b.datetime)
     }
   }
 }
