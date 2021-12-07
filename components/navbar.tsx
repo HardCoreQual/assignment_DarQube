@@ -7,7 +7,6 @@ export type MenuItem = typeof menu[number];
 export const Navbar = ({selected, setSelected}: { selected: MenuItem, setSelected: (e: MenuItem) => void }) => {
   return <div css={`
       height: 83px;
-      margin-top: 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;

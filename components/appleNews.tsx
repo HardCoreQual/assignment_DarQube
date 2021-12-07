@@ -11,7 +11,7 @@ export const AppleNews = (props: AppleNewsProps) => {
   const [selected, setSelected] = useState<MenuItem>('news');
 
   return <div css={`
-    padding: 0 13px 0 31px;
+    padding: 40px 13px 40px 31px;
     background-color: #242525;
     display: inline-block;
   `}>
@@ -47,9 +47,38 @@ const AppleNewsList = ({news}: AppleNewsProps) => {
           ))}
         </div>
       ))}
+      <div css={`
+        display: flex;
+        justify-content: space-between;
+        margin-right: 18px;
+      `}>
+        <div></div>
+
+        <div>
+          {page > 0 && <Button onClick={() => setPage(page -1 )}>Previous</Button>}
+          {page < (news.length /pageLimit - 1) && <Button onClick={() => setPage(page + 1 )}>Next</Button>}
+        </div>
+      </div>
     </div>
   </div>
 }
+
+const Button = styled.div`
+  display: inline-block;
+  padding: 7px 32px;
+  color: #fff;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  user-select: none;
+  line-height: 11px;
+  letter-spacing: 0em;
+  text-align: left;
+  background: #3C3C3C;
+  border-radius: 60px;
+  margin-left: 10px;
+  cursor: pointer;
+`;
 
 const OneNews = ({height, imageUrl, width, title}: {
   height: number,
@@ -75,6 +104,7 @@ const BackgroundContainer = styled.div<{ height: number, width: number }>`
     height: ${props => props.height}px;
     z-index: 1;
     margin: 0 18px 18px 0;
+    border-radius: 6px;
 `;
 
 const Background = styled.div`
@@ -87,6 +117,5 @@ const Background = styled.div`
 
     background: linear-gradient(180deg, rgba(28, 58, 82, 0) 0%, #05141B 75.5%);
     opacity: 0.49;
-    border-radius: 6px;
   }
 `
