@@ -5,8 +5,8 @@ import axios from "axios";
 import {AppleOneNewsType} from "types/appleNews";
 import store, {useAppDispatch} from "../store/store";
 import {Provider} from "react-redux";
-import {useEffect} from "react";
-import {newsActions} from "../store/news";
+import {useEffect, useState} from "react";
+import {newsActions, useNewsSelector} from "../store/news";
 
 export const getServerSideProps: GetStaticProps<AppleNewsProps> = async () => {
   const news = await axios.get<AppleOneNewsType[]>((process.env as any).NEWS_SOURCE).then(resp => resp.data);
@@ -27,20 +27,21 @@ const AppleNewsPage: NextPage<AppleNewsProps> = (props) => {
 
       <Provider store={store}>
         <InitNews {...props} />
-        <AppleNews />
       </Provider>
     </>
   )
 }
 
 const InitNews = ({news}: AppleNewsProps) => {
+  const [isInit, setIsInit] = useState(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(newsActions.setNews(news))
+    dispatch(newsActions.setNews(news));
+    setIsInit(true);
   }, [news]);
 
-  return null;
+  return isInit ? <AppleNews /> : null;
 }
 
 export default AppleNewsPage;
