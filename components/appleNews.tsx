@@ -3,7 +3,6 @@ import {Navbar} from "components/navbar";
 import {OneNews} from "components/oneNews";
 import {useAppDispatch} from "../store/store";
 import {newsActions, useNewsSelector} from "../store/news";
-import {SpaceBetween} from "components/styled/spaceBetween";
 import {useMemo} from "react";
 import styled from "styled-components";
 
@@ -80,6 +79,11 @@ const AppleNewsList = () => {
     </div>
   </SpaceBetween>
 }
+
+const SpaceBetween = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
 
 const Button = styled.div`
   position: static;
