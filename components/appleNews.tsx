@@ -3,8 +3,9 @@ import {Navbar} from "components/navbar";
 import {OneNews} from "components/oneNews";
 import {Button} from "components/styled/paginationButton";
 import {useAppDispatch} from "../store/store";
-import {nextPage, previousPage, useNewsSelector} from "../store/news";
+import {newsActions, useNewsSelector} from "../store/news";
 import {SpaceBetween} from "components/styled/spaceBetween";
+import {useMemo} from "react";
 
 export type AppleNewsProps = {
   news: AppleOneNewsType[]
@@ -16,29 +17,38 @@ export const AppleNews = (props: AppleNewsProps) => {
     background-color: #242525;
     display: inline-block;
     width: 1439px;
-    height: 1082px;
+    height: 1000px;
   `}>
-    <Navbar />
-    <AppleNewsList {...props} />
+    <div css={`height: calc(100% - 80px)`}>
+      <Navbar />
+      <AppleNewsList {...props} />
+    </div>
   </div>
+}
+
+function searchInText(text: string, search: string) {
+  return text.toLowerCase().includes(search.toLowerCase());
 }
 
 const AppleNewsList = ({news}:AppleNewsProps) => {
   const isNewsMenu = useNewsSelector((state) => state.selectedMenu === 'news');
   const bookmarkIds = useNewsSelector((state) => state.bookmarkIds);
+  const searchKeyword = useNewsSelector(state => state.search);
   const page = useNewsSelector((state) => state.page);
   const dispatch = useAppDispatch();
+
+  const menuNews = isNewsMenu ? news.slice(1) : news.filter((e) => bookmarkIds.includes(e.id));
+
+  const showNews = useMemo(() => {
+    return menuNews.filter(e => searchInText(e.headline + ' ' + e.summary, searchKeyword));
+  }, [menuNews, searchKeyword]);
+
+  const pageLimit = 6;
+  const offset = page * pageLimit;
 
   if (!news.length) {
     return null;
   }
-
-  const showNews = isNewsMenu ? news.slice(1) : news.filter((e) => bookmarkIds.includes(e.id));
-
-  const pageLimit = 6;
-
-  const offset = page * pageLimit;
-
   return <SpaceBetween>
     {isNewsMenu && (
       <div>
@@ -63,8 +73,8 @@ const AppleNewsList = ({news}:AppleNewsProps) => {
         </div>
 
         <div>
-          {page > 0 && <Button onClick={() => dispatch(previousPage())}>Previous</Button>}
-          {page < (showNews.length /pageLimit - 1) && <Button onClick={() => dispatch(nextPage())}>Next</Button>}
+          {page > 0 && <Button onClick={() => dispatch(newsActions.previousPage())}>Previous</Button>}
+          {page < (showNews.length /pageLimit - 1) && <Button onClick={() => dispatch(newsActions.nextPage())}>Next</Button>}
         </div>
       </SpaceBetween>
     </div>

@@ -1,6 +1,9 @@
 import {MenuItem} from "components/styled/menuItem";
 import {useAppDispatch} from "../store/store";
 import {newsActions, useNewsSelector} from "../store/news";
+import {useState} from "react";
+import searchSvg from '../images/search.svg';
+import Image from 'next/image';
 
 const menu = ['news', 'bookmarks'] as const;
 
@@ -9,6 +12,10 @@ export type MenuItemTextType = typeof menu[number];
 export const Navbar = () => {
   const selected = useNewsSelector<MenuItemTextType>((state) => state.selectedMenu);
   const dispatch = useAppDispatch();
+
+  const [search, setSearch] = useState('');
+
+  const handleSearch = () => dispatch(newsActions.changeSearch(search));
 
   return <div css={`
       height: 83px;
@@ -27,8 +34,31 @@ export const Navbar = () => {
       ))}
     </div>
 
-    <div>
-
+    <div css={`position: relative`}>
+      <div
+        onClick={handleSearch}
+        css={`
+          position: absolute;
+          top: 6px;
+          left: 6px;
+          cursor: pointer;
+`}
+      >
+        <Image src={searchSvg} height={16} width={16} />
+      </div>
+      <input
+        value={search}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') handleSearch()
+        }}
+        onChange={(e) => setSearch(e.target.value)}
+        css={`
+          background-color: #191919; border: 0;
+          height: 25px;
+          color: #fff;
+          padding-left: 30px;
+        `}
+      />
     </div>
   </div>
 }

@@ -8,6 +8,7 @@ type State = {
   page: number,
   bookmarkIds: number[],
   selectedMenu: MenuItemTextType,
+  search: string;
 };
 
 const initialState: State = {
@@ -15,6 +16,7 @@ const initialState: State = {
   page: 0,
   bookmarkIds: [],
   selectedMenu: 'news',
+  search: '',
 };
 
 const newsSlice = createSlice({
@@ -36,12 +38,15 @@ const newsSlice = createSlice({
     changeSelectMenu: (state, payload: PayloadAction<MenuItemTextType>) => {
       state.selectedMenu = payload.payload;
       state.page = 0;
+    },
+    changeSearch: (state, {payload}: PayloadAction<string>) => {
+      state.search = payload;
     }
   },
 });
 
 export const newsSliceReducer = newsSlice.reducer;
-export const { previousPage, nextPage, ...newsActions } = newsSlice.actions;
+export const newsActions = newsSlice.actions;
 
 export const useNewsSelector = <T>(
   selector: (state: RootState['news']) => T,
