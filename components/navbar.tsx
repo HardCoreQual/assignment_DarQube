@@ -34,7 +34,7 @@ export const Navbar = () => {
       ))}
     </div>
 
-    <div css={`position: relative`}>
+    <div css={`position: relative; padding-right: 22px;`}>
       <div
         onClick={handleSearch}
         css={`
@@ -42,21 +42,23 @@ export const Navbar = () => {
           top: 6px;
           left: 6px;
           cursor: pointer;
-`}
+      `}
       >
-        <Image src={searchSvg} height={16} width={16} />
+        <Image src={searchSvg} height={16} width={16} alt={'Search'} />
       </div>
       <input
         value={search}
         onKeyPress={(e) => {
           if (e.key === 'Enter') handleSearch()
         }}
+        placeholder={'Search'}
         onChange={(e) => setSearch(e.target.value)}
         css={`
           background-color: #191919; border: 0;
           height: 25px;
           color: #fff;
           padding-left: 30px;
+          border-radius: 3px;
         `}
       />
     </div>

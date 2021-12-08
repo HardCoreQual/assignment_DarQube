@@ -16,7 +16,7 @@ export const AppleNews = (props: AppleNewsProps) => {
     padding: 40px 13px 40px 31px;
     background-color: #242525;
     display: inline-block;
-    width: 1439px;
+    width: 1398px;
     height: 1000px;
   `}>
     <div css={`height: calc(100% - 80px)`}>
