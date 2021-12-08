@@ -52,7 +52,12 @@ export const Navbar = () => {
           if (e.key === 'Enter') handleSearch()
         }}
         placeholder={'Search'}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          if (!e.target.value) {
+            dispatch(newsActions.changeSearch(''));
+          }
+        }}
         css={`
           background-color: #191919; border: 0;
           height: 25px;

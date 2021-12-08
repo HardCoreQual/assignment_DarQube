@@ -53,21 +53,23 @@ const AppleNewsList = ({news}:AppleNewsProps) => {
     {isNewsMenu && (
       <div>
         <div css={`height: 100%`}>
-          <OneNews height={628} width={478} oneNews={news[0]} />
+          <OneNews oneNews={news[0]} isMain={true} />
         </div>
       </div>
     )}
     <div css={`width: calc(100% - 496px)`}>
       {showNews.slice(offset, offset + pageLimit).map(e => (
         <div key={e.id} css={`width: ${33.33}%; display: inline-block`}>
-          <OneNews height={425} width={280} oneNews={e} />
+          <OneNews oneNews={e} isMain={false} />
         </div>
       ))}
 
       <SpaceBetween css={`margin-right: 18px;`}>
         <div css={`color: #fff`}>
           <span>
-            {page * pageLimit + 1}-{Math.min(page * pageLimit + pageLimit, showNews.length)}
+            {showNews.length === 0 ? 0 : <>
+              {page * pageLimit + 1}-{page * pageLimit + pageLimit}
+            </>}
           </span>
           <span css={`opacity: 0.25`}> of {showNews.length}</span>
         </div>

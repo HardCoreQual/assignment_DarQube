@@ -7,12 +7,15 @@ import Image from 'next/image';
 import bookmark from '../images/bookmark.svg';
 import emptyBookmark from '../images/emptyBookmark.svg';
 
-export const OneNews = ({height, width, oneNews}: {
-  height: number,
-  width: number,
+export const OneNews = ({oneNews, isMain}: {
   oneNews: AppleOneNewsType,
+  isMain: boolean,
 }) => {
-  return <BackgroundContainer width={width} height={height}>
+
+  return <BackgroundContainer
+    width={isMain ? 478 : 280}
+    height={isMain ? 628 : 425}
+  >
     <Background>
       <img src={oneNews.image} height="100%" width="100%" alt=""/>
 
@@ -22,6 +25,22 @@ export const OneNews = ({height, width, oneNews}: {
 
     <div css={`padding: 32px 26px; height: 100%`}>
       <div css={`position: relative; height: calc(100% - 64px)`}>
+        <div
+          onClick={() => window.open(oneNews.url, '_blank')}
+          css={`
+          position: absolute;
+          bottom: 40px;
+          color: #fff;
+          font-size: ${isMain ? 24 : 20}px;
+          line-height: ${isMain ? 32 : 28}px;
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        `}>
+          {oneNews.headline}
+        </div>
+
         <div css={`
           position: absolute;
           bottom: 0;
@@ -49,6 +68,6 @@ const NewsBookmark = ({id}: {id: number}) => {
   const dispatch = useAppDispatch();
 
   return isActive
-    ? <Image src={bookmark} width={13} height={13} onClick={() => dispatch(newsActions.removeBookmarkId(id))} />
-    : <Image src={emptyBookmark} width={13} height={13} onClick={() => dispatch(newsActions.addBookmarkId(id))} />;
+    ? <Image src={bookmark} width={13} height={13} alt="" onClick={(e) => dispatch(newsActions.removeBookmarkId(id))} />
+    : <Image src={emptyBookmark} width={13} height={13} alt="" onClick={(e) => dispatch(newsActions.addBookmarkId(id))} />;
 }
