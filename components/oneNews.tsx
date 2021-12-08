@@ -1,4 +1,3 @@
-import {SpaceBetween} from "components/styled/spaceBetween";
 import {AppleOneNewsType} from "types/appleNews";
 import dayjs from 'dayjs';
 import {truncText} from "../utils/truncText";
@@ -55,7 +54,7 @@ export const OneNews = ({oneNews, isMain}: {
           <Title isMain={isMain}>
             {oneNews.headline}
           </Title>
-          <div css={`font-size: 12px;color: #aaa;`}>
+          <div css={`font-size: 12px; color: #ddd;`}>
             {truncText(oneNews.summary, 100)}
           </div>
         </div>
@@ -64,14 +63,6 @@ export const OneNews = ({oneNews, isMain}: {
           <NewsBookmark id={oneNews.id} />
         </div>
       </div>
-
-      <SpaceBetween>
-        <div>
-
-        </div>
-
-
-      </SpaceBetween>
     </div>
   </BackgroundContainer>
 }
