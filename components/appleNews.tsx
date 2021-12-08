@@ -47,11 +47,8 @@ const AppleNewsList = () => {
   const pageLimit = 6;
   const offset = page * pageLimit;
 
-  if (!news.length) {
-    return null;
-  }
   return <SpaceBetween>
-    {isNewsMenu && (
+    {isNewsMenu && news.length && (
       <div>
         <div css={`height: 100%`}>
           <OneNews oneNews={news[0]} isMain={true} />
