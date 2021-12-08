@@ -15,6 +15,8 @@ export const AppleNews = (props: AppleNewsProps) => {
     padding: 40px 13px 40px 31px;
     background-color: #242525;
     display: inline-block;
+    width: 1439px;
+    height: 1082px;
   `}>
     <Navbar />
     <AppleNewsList {...props} />
@@ -33,33 +35,32 @@ const AppleNewsList = ({news}:AppleNewsProps) => {
 
   const showNews = isNewsMenu ? news.slice(1) : news.filter((e) => bookmarkIds.includes(e.id));
 
-  const rowLimit = 3;
-  const countRows = 2;
-  const pageLimit = countRows * rowLimit;
+  const pageLimit = 6;
 
   const offset = page * pageLimit;
 
-  return <div css={`
-    display: flex;
-    justify-content: flex-start;
-  `}>
+  return <SpaceBetween>
     {isNewsMenu && (
       <div>
-        <OneNews height={628} width={478}  oneNews={news[0]} />
+        <div css={`height: 100%`}>
+          <OneNews height={628} width={478} oneNews={news[0]} />
+        </div>
       </div>
     )}
-    <div>
-      {Array(countRows).fill(null).map((e, i) => {
-        const rowOffset = offset + rowLimit * i;
-
-        return <div key={i}>
-          {showNews.slice(rowOffset, rowOffset + rowLimit).map(e => (
-            <OneNews height={425} width={280} oneNews={e} key={e.id} />
-          ))}
+    <div css={`width: calc(100% - 496px)`}>
+      {showNews.slice(offset, offset + pageLimit).map(e => (
+        <div key={e.id} css={`width: ${33.33}%; display: inline-block`}>
+          <OneNews height={425} width={280} oneNews={e} />
         </div>
-      })}
+      ))}
+
       <SpaceBetween css={`margin-right: 18px;`}>
-        <div></div>
+        <div css={`color: #fff`}>
+          <span>
+            {page * pageLimit + 1}-{Math.min(page * pageLimit + pageLimit, showNews.length)}
+          </span>
+          <span css={`opacity: 0.25`}> of {showNews.length}</span>
+        </div>
 
         <div>
           {page > 0 && <Button onClick={() => dispatch(previousPage())}>Previous</Button>}
@@ -67,6 +68,6 @@ const AppleNewsList = ({news}:AppleNewsProps) => {
         </div>
       </SpaceBetween>
     </div>
-  </div>
+  </SpaceBetween>
 }
 
