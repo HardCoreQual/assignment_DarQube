@@ -11,7 +11,7 @@ export const getServerSideProps: GetStaticProps<AppleNewsProps> = async () => {
 
   return {
     props: {
-      news: news.sort((a,b) => a.datetime - b.datetime)
+      news: news.sort((a,b) => b.datetime - a.datetime)
     }
   }
 }
