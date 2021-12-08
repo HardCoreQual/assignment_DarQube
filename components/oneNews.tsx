@@ -1,13 +1,10 @@
 import {SpaceBetween} from "components/styled/spaceBetween";
 import {Background, BackgroundContainer} from "components/styled/backgroundImage";
 import {AppleOneNewsType} from "types/appleNews";
-import {useAppDispatch, useAppSelector} from "../store/store";
-import {newsActions} from "../store/news";
-import Image from 'next/image';
-import bookmark from '../images/bookmark.svg';
-import emptyBookmark from '../images/emptyBookmark.svg';
 import dayjs from 'dayjs';
 import {truncText} from "../utils/truncText";
+import styled from "styled-components";
+import {NewsBookmark} from "components/newsBookmark";
 
 export const OneNews = ({oneNews, isMain}: {
   oneNews: AppleOneNewsType,
@@ -28,98 +25,43 @@ export const OneNews = ({oneNews, isMain}: {
 
     <div css={`padding: 32px 26px; height: 100%`}>
       <div css={`position: relative; height: calc(100% - 64px)`}>
-        <div css={`
-          color: #fff;
-          border: 2px solid #fff;
-          position: absolute;
-          border-radius: 20px;
-          padding: 5px 10px;
-          font-size: 14px;
-        `}>
+        <Related>
           {oneNews.related}
-        </div>
+        </Related>
 
         {isMain && (
-          <div css={`
-            right: 0;
-            position: absolute;
-            color: #fff;
-            background-color: #B73556;
-            border-radius: 2px;
-            padding: 3px 5px;
-            font-size: 12px;
-        `}>
+          <LastResearch>
             LATEST RESEARCH
-          </div>
+          </LastResearch>
         )}
 
-        <div css={`
-          position: absolute;
-          bottom: 0;
-          display: flex;
-          align-items: center;
-          height: 20px;
-          width: 100%;
-        `}>
+        <LeftBottomContainer>
           {isMain && (
             <>
-            <span
-              onClick={openUrl}
-              css={`
-              color: #fff;
-              font-weight: bold;
-              font-size: 14px;
-              &:hover {
-                cursor: pointer;
-                text-decoration: underline;
-              }`
-            }>
+            <ReadTheResearch onClick={openUrl}>
               Read the Research
-            </span>
+            </ReadTheResearch>
 
-              <div css={`
-                 display: inline-block;
-                 border-right: 1px solid #aaa;
-                 height: 100%;
-                 margin: 0 10px;
-              `} />
+              <VerticalSeparator />
             </>
           )}
           <span css={`color: #aaa;`}>
             {dayjs(new Date(oneNews.datetime * 1000)).format('D MMM YYYY')}
           </span>
-        </div>
+        </LeftBottomContainer>
 
         <div
           onClick={openUrl}
-          css={`
-          position: absolute;
-          bottom: 40px;
-        `}>
-          <div css={`
-          color: #fff;
-          font-weight: 500;
-          font-size: ${isMain ? 24 : 20}px;
-          line-height: ${isMain ? 32 : 28}px;
-          cursor: pointer;
-          &:hover {
-            text-decoration: underline;
-          }`}>
+          css={`position: absolute; bottom: 40px;`}>
+          <Title isMain={isMain}>
             {oneNews.headline}
-          </div>
-          <div css={`
-            font-size: 12px;
-            color: #aaa;
-          `}>
+          </Title>
+          <div css={`font-size: 12px;color: #aaa;`}>
             {truncText(oneNews.summary, 100)}
           </div>
         </div>
 
-        <div css={`
-          position: absolute;
-          bottom: 0;
-          right: 0;
-        `}>
+        <div css={`position: absolute;bottom: 0;right: 0;`}>
           <NewsBookmark id={oneNews.id} />
         </div>
       </div>
@@ -135,13 +77,59 @@ export const OneNews = ({oneNews, isMain}: {
   </BackgroundContainer>
 }
 
-const NewsBookmark = ({id}: {id: number}) => {
-  const isActive = useAppSelector<boolean>((state) => {
-    return state.news.bookmarkIds.includes(id);
-  });
-  const dispatch = useAppDispatch();
+const VerticalSeparator = styled.div`
+   display: inline-block;
+   border-right: 1px solid #aaa;
+   height: 100%;
+   margin: 0 10px;
+`;
 
-  return isActive
-    ? <Image src={bookmark} width={13} height={13} alt="" onClick={(e) => dispatch(newsActions.removeBookmarkId(id))} />
-    : <Image src={emptyBookmark} width={13} height={13} alt="" onClick={(e) => dispatch(newsActions.addBookmarkId(id))} />;
-}
+const Title = styled.div<{isMain: boolean}>`
+  color: #fff;
+  font-weight: 500;
+  font-size: ${({isMain}) => isMain ? 24 : 20}px;
+  line-height: ${({isMain}) => isMain ? 32 : 28}px;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const ReadTheResearch = styled.div`
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
+
+const LeftBottomContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  height: 20px;
+  width: 100%;
+`;
+
+
+const LastResearch = styled.div`
+  right: 0;
+  position: absolute;
+  color: #fff;
+  background-color: #B73556;
+  border-radius: 2px;
+  padding: 3px 5px;
+  font-size: 12px;
+`;
+
+const Related = styled.div`
+  color: #fff;
+  border: 2px solid #fff;
+  position: absolute;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 14px;
+`;
