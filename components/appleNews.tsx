@@ -11,7 +11,7 @@ export type AppleNewsProps = {
   news: AppleOneNewsType[]
 }
 
-export const AppleNews = (props: AppleNewsProps) => {
+export const AppleNews = () => {
   return <div css={`
     padding: 40px 13px 40px 31px;
     background-color: #242525;
@@ -21,7 +21,7 @@ export const AppleNews = (props: AppleNewsProps) => {
   `}>
     <div css={`height: calc(100% - 80px)`}>
       <Navbar />
-      <AppleNewsList {...props} />
+      <AppleNewsList />
     </div>
   </div>
 }
@@ -30,7 +30,8 @@ function searchInText(text: string, search: string) {
   return text.toLowerCase().includes(search.toLowerCase());
 }
 
-const AppleNewsList = ({news}:AppleNewsProps) => {
+const AppleNewsList = () => {
+  const news = useNewsSelector((state) => state.news);
   const isNewsMenu = useNewsSelector((state) => state.selectedMenu === 'news');
   const bookmarkIds = useNewsSelector((state) => state.bookmarkIds);
   const searchKeyword = useNewsSelector(state => state.search);

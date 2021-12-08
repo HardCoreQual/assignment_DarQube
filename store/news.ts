@@ -41,6 +41,9 @@ const newsSlice = createSlice({
     },
     changeSearch: (state, {payload}: PayloadAction<string>) => {
       state.search = payload;
+    },
+    setNews: (state, {payload}: PayloadAction<AppleOneNewsType[]>) => {
+      state.news = payload;
     }
   },
 });
