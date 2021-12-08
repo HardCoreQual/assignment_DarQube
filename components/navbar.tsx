@@ -1,6 +1,6 @@
 import {useAppDispatch} from "../store/store";
 import {newsActions, useNewsSelector} from "../store/news";
-import {useState} from "react";
+import React, {useCallback, useState} from "react";
 import searchSvg from '../images/search.svg';
 import Image from 'next/image';
 import styled, {css} from "styled-components";
@@ -10,45 +10,66 @@ const menu = ['news', 'bookmarks'] as const;
 export type MenuItemTextType = typeof menu[number];
 
 export const Navbar = () => {
+
+  return <NavbarContainer>
+    <MenuMemo />
+    <MemoSearch />
+  </NavbarContainer>
+}
+
+const Search = () => {
+  const [search, setSearch] = useState('');
+  const dispatch = useAppDispatch();
+
+  const handleSearch = useCallback(() => {
+    dispatch(newsActions.changeSearch(search));
+  }, []);
+
+  return <div css={`position: relative; padding-right: 22px;`}>
+    <MemoSearchButton handleSearch={handleSearch} />
+    <Input
+      value={search}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter') handleSearch()
+      }}
+      placeholder={'Search'}
+      onChange={(e) => {
+        setSearch(e.target.value);
+        if (!e.target.value) {
+          dispatch(newsActions.changeSearch(''));
+        }
+      }}
+    />
+  </div>
+}
+
+const MemoSearch = React.memo(Search);
+
+const SearchButton = ({handleSearch}: { handleSearch: () => void }) => {
+  return <SearchButtonContainer onClick={handleSearch}>
+    <Image src={searchSvg} height={16} width={16} alt={'Search'} />
+  </SearchButtonContainer>
+}
+
+const MemoSearchButton = React.memo(SearchButton);
+
+const Menu = () => {
   const selected = useNewsSelector<MenuItemTextType>((state) => state.selectedMenu);
   const dispatch = useAppDispatch();
 
-  const [search, setSearch] = useState('');
-
-  const handleSearch = () => dispatch(newsActions.changeSearch(search));
-
-  return <NavbarContainer>
-    <div>
-      {menu.map((e) => (
-        <MenuItem
-          active={selected === e}
-          key={e}
-          onClick={() => dispatch(newsActions.changeSelectMenu(e))}>
-              {e.slice(0, 1).toUpperCase() + e.slice(1)}
-            </MenuItem>
-      ))}
-    </div>
-
-    <div css={`position: relative; padding-right: 22px;`}>
-      <SearchButtonContainer onClick={handleSearch}>
-        <Image src={searchSvg} height={16} width={16} alt={'Search'} />
-      </SearchButtonContainer>
-      <Input
-        value={search}
-        onKeyPress={(e) => {
-          if (e.key === 'Enter') handleSearch()
-        }}
-        placeholder={'Search'}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          if (!e.target.value) {
-            dispatch(newsActions.changeSearch(''));
-          }
-        }}
-      />
-    </div>
-  </NavbarContainer>
+  return <div>
+    {menu.map((e) => (
+      <MenuItem
+        active={selected === e}
+        key={e}
+        onClick={() => dispatch(newsActions.changeSelectMenu(e))}>
+        {e.slice(0, 1).toUpperCase() + e.slice(1)}
+      </MenuItem>
+    ))}
+  </div>
 }
+
+const MenuMemo = React.memo(Menu);
 
 const Input = styled.input`
   background-color: #191919; border: 0;

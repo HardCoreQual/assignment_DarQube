@@ -2,7 +2,7 @@ import {AppleOneNewsType} from "types/appleNews";
 import {useAppDispatch} from "../store/store";
 import {OneNews} from "components/oneNews";
 import {newsActions} from "../store/news";
-import React from "react";
+import React, {useCallback} from "react";
 import styled from "styled-components";
 
 export const NewsList = ({showNews, offset, pageLimit, page}: {
@@ -11,8 +11,6 @@ export const NewsList = ({showNews, offset, pageLimit, page}: {
   page: number,
   showNews: AppleOneNewsType[]
 }) => {
-  const dispatch = useAppDispatch();
-
   return <div css={`width: calc(100% - 496px)`}>
     {showNews.slice(offset, offset + pageLimit).map(e => (
       <div key={e.id} css={`width: ${33.33}%; display: inline-block`}>
@@ -30,13 +28,21 @@ export const NewsList = ({showNews, offset, pageLimit, page}: {
         <span css={`opacity: 0.25`}> of {showNews.length}</span>
       </div>
 
-      <div>
-        {page > 0 && <Button onClick={() => dispatch(newsActions.previousPage())}>Previous</Button>}
-        {page < (showNews.length / pageLimit - 1) && <Button onClick={() => dispatch(newsActions.nextPage())}>Next</Button>}
-      </div>
+      <MemoPagination showPrevious={page > 0} showNext={page < (showNews.length / pageLimit - 1)} />
     </SpaceBetween>
   </div>
 }
+
+const Pagination = ({showNext, showPrevious}: {showNext: boolean, showPrevious: boolean}) =>  {
+  const dispatch = useAppDispatch();
+
+  return <div>
+    {showPrevious && <Button onClick={() => dispatch(newsActions.previousPage())}>Previous</Button>}
+    {showNext && <Button onClick={() => dispatch(newsActions.nextPage())}>Next</Button>}
+  </div>
+}
+const MemoPagination = React.memo(Pagination);
+
 export const SpaceBetween = styled.div`
   display: flex;
   justify-content: space-between;
