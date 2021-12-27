@@ -9,7 +9,7 @@ import {useEffect, useState} from "react";
 import {newsActions} from "../store/news";
 
 export const getServerSideProps: GetStaticProps<AppleNewsProps> = async () => {
-  const news = await axios.get<AppleOneNewsType[]>((process.env as any).NEWS_SOURCE).then(resp => resp.data);
+  const news = await axios.get<AppleOneNewsType[]>('/api/news').then(resp => resp.data);
 
   return {
     props: {
